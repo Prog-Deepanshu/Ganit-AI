@@ -1,0 +1,57 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hand Drawing App</title>
+    <style>
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .video-feed {
+            margin-bottom: 20px;
+        }
+        .answer-box {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .answer-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="video-feed">
+            <img src="{{ url_for('video') }}" width="1280" height="720">
+        </div>
+        <div class="answer-box">
+            <h2>AI Response:</h2>
+            <p class="answer-text" id="answer-text">Waiting for input...</p>
+        </div>
+    </div>
+
+    <script>
+        function updateAnswer() {
+            fetch('/get_answer')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.answer) {
+                        document.getElementById('answer-text').textContent = data.answer;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Update the answer every second
+        setInterval(updateAnswer, 1000);
+    </script>
+</body>
+</html>
